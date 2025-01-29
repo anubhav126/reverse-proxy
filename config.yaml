@@ -1,0 +1,33 @@
+server:
+  listen: 8080  # the port that our proxy will listen to
+  workers:  4 # worker threads, by default set to the number of cores in your CPU
+  upstreams: 
+    - id: todos
+      url: jsonplaceholder.typicode.com
+    - id: comments
+      url: jsonplaceholder.typicode.com
+    - id: photos
+      url: jsonplaceholder.typicode.com
+    - id: albums
+      url: jsonplaceholder.typicode.com      
+
+  headers: 
+    - key: x-forward
+      value: "$ip"
+    - key: Authorization
+      value: "Bearer xyz"
+
+  rules:
+  - path: /
+    upstreams: 
+      - node1
+      - node2
+  - path: /photos
+    upstreams: 
+      - photos
+  - path: /comments
+    upstreams: 
+      - comments   
+  - path: /albums
+    upstreams: 
+      - albums 
